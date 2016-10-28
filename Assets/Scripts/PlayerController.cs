@@ -68,7 +68,7 @@ public class PlayerController : MonoBehaviour {
         }
         else if (Input.GetKeyDown(KeyCode.R))
         {
-            SaveLoad.Load();
+			//SaveLoad.Load();
         }
     }
 }

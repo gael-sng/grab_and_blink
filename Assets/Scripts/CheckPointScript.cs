@@ -10,6 +10,7 @@ public class CheckPointScript : MonoBehaviour {
 			print ("Salvei");
 			save = save.SaveNow ();
 			GameObject.Destroy(myself);
+			GameObject.Find ("Charater").GetComponent<GUIController> ().CheckpointMessage();
 		}
 	}
 }

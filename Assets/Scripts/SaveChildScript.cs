@@ -22,6 +22,7 @@ public class SaveChildScript: MonoBehaviour {
 
 	void Update(){
 		if (Input.GetKeyDown (KeyCode.R)) {
+			GameObject.Find ("Charater").GetComponent<GUIController> ().resetMessage();
 			print ("destruido");
 			saved.GetComponent<SaveChildScript>().enabled = true;
 			saved.SetActive (true);

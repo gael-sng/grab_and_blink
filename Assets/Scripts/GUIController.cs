@@ -4,12 +4,13 @@ using System.Collections;
 public class GUIController : MonoBehaviour {
 
     public float messageTime = 2.0f;
-
+    public Texture2D menuBackground;
     private enum msg{ dontHaveKey, dontHaveAmulet, gotAmulet, gotKey, checkpoint, won, reset, unlockDoor, size};
 
     bool[] message = new bool[(int) msg.size];
     float[] counter = new float[(int) msg.size];
 
+    private bool menuOn;
     private string paramMessage;
     // Use this for initialization
     void Start() {
@@ -18,10 +19,16 @@ public class GUIController : MonoBehaviour {
             message[i] = false;
             counter[i] = 0.0f;
         }
+
+        CloseMenu();
     }
 
     // Update is called once per frame
     void Update () {
+        if (Input.GetKeyDown(KeyCode.Escape)) {
+            if (menuOn) CloseMenu();
+            else OpenMenu();
+        }
 
         for (int i=0; i<(int)msg.size; i++) {
             if (message[i]) {
@@ -131,5 +138,41 @@ public class GUIController : MonoBehaviour {
             text = "You unlocked this door! You may pass through it without amulets for now on";
             GUI.Box(new Rect(0, Screen.height * 0.8f, Screen.width, 20), text, style);
         }
+
+
+        if (menuOn) {
+            GUI.DrawTexture(new Rect(Screen.width * 0.1f, Screen.height * 0.1f, Screen.width*0.8f, Screen.height * 0.8f), menuBackground);
+
+            if (GUI.Button(new Rect(Screen.width * 0.4f, Screen.height * 0.8f, 80, 40), "Exit menu")) {
+                CloseMenu();
+            }
+            if (GUI.Button(new Rect(Screen.width * 0.4f + 100, Screen.height * 0.8f, 80, 40), "Quit game")) {
+                Application.Quit();
+            }
+
+
+            GUIStyle style2;
+            style2 = new GUIStyle();
+            style2.alignment = TextAnchor.UpperCenter;
+            style2.fontSize = 12;
+            style2.fontStyle = FontStyle.Bold;
+            GUI.Box(new Rect(Screen.width * 0.11f, Screen.height * 0.7f, 100, 20), "Volume", style2);
+            AudioListener.volume = GUI.HorizontalSlider(new Rect(Screen.width * 0.11f + 100, Screen.height * 0.7f, 200, 50), AudioListener.volume, 0.0F, 1.0F);
+            GUI.Box(new Rect(Screen.width * 0.11f, Screen.height * 0.6f, 100, 20), "Sensitivity", style2);
+            GetComponent<CharacterControl>().rotateSpeed = GUI.HorizontalSlider(new Rect(Screen.width * 0.11f + 100, Screen.height * 0.6f, 200, 50), GetComponent<CharacterControl>().rotateSpeed, 0.1F, 1.0F);
+        }
+
+        GUI.Box(new Rect(5, 5, Screen.width, 20), "Press ESC for menu", style);
+    }
+
+    public void OpenMenu() {
+        Cursor.visible = true;
+        Cursor.lockState = CursorLockMode.None;
+        menuOn = true;
+    }
+    public void CloseMenu() {
+        Cursor.visible = false;
+        Cursor.lockState = CursorLockMode.Locked;
+        menuOn = false;
     }
 }

@@ -15,15 +15,26 @@ public class PlayerController : MonoBehaviour {
     static List<string> DOORS = new List<string>();
     static List<string> AMULETS = new List<string>();
     static List<Material> TEXTURES = new List<Material>();
+    static List<AudioClip> AUDIO = new List<AudioClip>();
     static List<string> COLOR = new List<String>();
+
+    
+    public AudioClip teleportSound;
+    private AudioSource source;
+    private float teleportVol = 0.5f;
+
 
     void OnGUI()
     {
         GUI.DrawTexture(new Rect(Screen.width / 2 - 7, Screen.height / 2 - 7, 14, 14), centerTexture);
     }
-    
+
+    void Awake()
+    {
+        source = GetComponent<AudioSource>();
+    }
+
     void Start() {
-        Cursor.lockState = CursorLockMode.Locked;
         
         amulet = null;
 
@@ -71,6 +82,9 @@ public class PlayerController : MonoBehaviour {
         TEXTURES.Add((Material)UnityEditor.AssetDatabase.LoadAssetAtPath("Assets/Objects/Chave/Materials/Chave6.mat", typeof(Material)));
         TEXTURES.Add((Material)UnityEditor.AssetDatabase.LoadAssetAtPath("Assets/Objects/Chave/Materials/Chave7.mat", typeof(Material)));
         TEXTURES.Add((Material)UnityEditor.AssetDatabase.LoadAssetAtPath("Assets/Objects/Chave/Materials/Chave8.mat", typeof(Material)));
+
+        AUDIO.Add((AudioClip)UnityEditor.AssetDatabase.LoadAssetAtPath("Assets/Sounds/Door.wav", typeof(AudioClip)));
+        AUDIO.Add((AudioClip)UnityEditor.AssetDatabase.LoadAssetAtPath("Assets/Sounds/Teleport.wav", typeof(AudioClip)));
     }
     
     void Update() {
@@ -111,6 +125,7 @@ public class PlayerController : MonoBehaviour {
                     {
                         if (keys.Contains("K" + hit.collider.gameObject.tag.Remove(0, 1))) //Tem a chave certa
                         {
+                            source.PlayOneShot(AUDIO[0]);
                             hit.collider.gameObject.SendMessageUpwards("Open");            //Abre a porta
                             keys.Remove("K" + hit.collider.gameObject.tag.Remove(0, 1));   //Remove chave do inventario
                         }
@@ -131,15 +146,23 @@ public class PlayerController : MonoBehaviour {
                     print("Porta tag: " + hit.collider.tag);
                     if (DOORS.Contains(hit.collider.tag))
                     {
-                        transform.position = hit.collider.GetComponentInParent<DoorOpening>().GetTeleportPosition(transform.position);
+                        source.PlayOneShot(AUDIO[1]);
+						eyeAnimator.Play ("eyeOclusion");
+						StartCoroutine (GetThroughDoor (hit, 0.45f));
+                        source.PlayOneShot(teleportSound, teleportVol);
                     }
-                    else
-                    {
-                        GetComponent<GUIController>().DontHaveAmuletMessage();
-                    }
+                    
                     //blink animation
                 }
+				else
+				{
+					GetComponent<GUIController>().DontHaveAmuletMessage();
+				}
             }
         }
     }
+	IEnumerator GetThroughDoor(RaycastHit hit, float delay){
+		yield return new WaitForSeconds (delay);
+		transform.position = hit.collider.GetComponentInParent<DoorOpening>().GetTeleportPosition(transform.position);
+	}
 }

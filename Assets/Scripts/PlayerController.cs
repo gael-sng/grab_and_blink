@@ -5,7 +5,7 @@ using System.Collections.Generic;
 public class PlayerController : MonoBehaviour {
 
     public Animator eyeAnimator;
-    public GameObject amulet = null;
+    public GameObject amulet;
     List<string> keys = new List<string>(); //suas chaves
     public float grabDistance = 2.5f;
 
@@ -18,6 +18,8 @@ public class PlayerController : MonoBehaviour {
     void Start () {
 		//Cursor.visible = false;
 		Cursor.lockState = CursorLockMode.Locked;
+
+        amulet = null;
 
         KEYS.Add("K1");
         KEYS.Add("K2");
@@ -51,7 +53,7 @@ public class PlayerController : MonoBehaviour {
                 {
                     if (amulet != null)
                     {
-                        print("hello");
+                        print("nao null");
                         GameObject aux = hit.collider.gameObject;
                         amulet.transform.position = hit.collider.transform.position;
                         Destroy(hit.collider.gameObject);
@@ -60,7 +62,7 @@ public class PlayerController : MonoBehaviour {
                     }
                     else
                     {
-                        print("sfsfd");
+                        print("null");
                         amulet = hit.collider.gameObject;
                         Destroy(hit.collider.gameObject);
                     }

@@ -21,12 +21,11 @@ public class CharacterControl : MonoBehaviour {
         rb.velocity = (walkSpeed * direction);
 
  
-        transform.Rotate(new Vector3(0, rotateSpeed * Input.GetAxis("Mouse X"), 0));
+        transform.Rotate(new Vector3(0, Time.deltaTime * rotateSpeed * Input.GetAxis("Mouse X"), 0));
 
-        float newRotation = transform.eulerAngles.x-Time.deltaTime * rotateSpeed * Input.GetAxis("Mouse Y");
-        if (transform.eulerAngles.x >= 180 && newRotation < 360-maxAngle || transform.eulerAngles.x<180 && newRotation < maxAngle) {
-            head.transform.eulerAngles = new Vector3(newRotation, 0, 0);
-        }
-        print("Actual: " + head.transform.eulerAngles.x + " - Clamb between (" + maxAngle + ") and (" + (360 - maxAngle) + ")");
+        float newRotation = head.transform.localEulerAngles.x - Time.deltaTime * rotateSpeed * Input.GetAxis("Mouse Y");
+        
+        head.transform.localEulerAngles = new Vector3(newRotation, head.transform.localEulerAngles.y, head.transform.localEulerAngles.z);
+        print("Actual: " + head.transform.localEulerAngles.x + " - Clamb between (" + maxAngle + ") and (" + (360 - maxAngle) + ")");
 	}
 }

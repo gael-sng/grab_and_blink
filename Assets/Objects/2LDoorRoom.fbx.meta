@@ -12,6 +12,7 @@ ModelImporter:
     100008: Wall4
     100010: WallWithDoor
     100012: WallWithDoor.001
+    100014: Wall2
     400000: //RootNode
     400002: Ceil
     400004: Floor
@@ -19,24 +20,28 @@ ModelImporter:
     400008: Wall4
     400010: WallWithDoor
     400012: WallWithDoor.001
+    400014: Wall2
     2300000: Ceil
     2300002: Floor
     2300004: Wall3
     2300006: Wall4
     2300008: WallWithDoor
     2300010: WallWithDoor.001
+    2300012: Wall2
     3300000: Ceil
     3300002: Floor
     3300004: Wall3
     3300006: Wall4
     3300008: WallWithDoor
     3300010: WallWithDoor.001
+    3300012: Wall2
     4300000: WallWithDoor.001
     4300002: Ceil
     4300004: Wall4
     4300006: Wall3
     4300008: WallWithDoor
     4300010: Floor
+    4300012: Wall2
   materials:
     importMaterials: 1
     materialName: 0

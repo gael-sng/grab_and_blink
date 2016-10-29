@@ -21,4 +21,11 @@ public class Amulet : MonoBehaviour {
     {
         myposition = new Vector3(transform.position.x, transform.position.y, transform.position.z);
     }
+
+    public void Updade()
+    {
+        myposition.x = transform.position.x;
+        myposition.y = transform.position.y;
+        myposition.z = transform.position.z;
+    }
 }

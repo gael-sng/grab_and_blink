@@ -5,20 +5,39 @@ using System.Collections.Generic;
 public class PlayerController : MonoBehaviour {
 
     public Animator eyeAnimator;
-    public GameObject glassesSlot;
+    public GameObject amulet = null;
     List<string> keys = new List<string>(); //suas chaves
     public float grabDistance = 2.5f;
-    public int checkPoint; //de 0 a 6
+
+    static List<string> KEYS = new List<string>();
+    static List<string> DOORS = new List<string>();
+    static List<string> AMULETS = new List<string>();
+
 
     // Use this for initialization
     void Start () {
-		Cursor.visible = false;
+		//Cursor.visible = false;
 		Cursor.lockState = CursorLockMode.Locked;
+
+        KEYS.Add("K1");
+        KEYS.Add("K2");
+        KEYS.Add("K3");
+        KEYS.Add("K4");
+
+        DOORS.Add("D1");
+        DOORS.Add("D2");
+        DOORS.Add("D3");
+        DOORS.Add("D4");
+
+        AMULETS.Add("A1");
+        AMULETS.Add("A2");
+        AMULETS.Add("A3");
+        AMULETS.Add("A4");
     }
 
     // Update is called once per frame
     void Update()
-    {
+    { 
         if (Input.GetKeyDown(KeyCode.E))
         {
             Ray ray = Camera.main.ScreenPointToRay(Input.mousePosition);
@@ -28,47 +47,58 @@ public class PlayerController : MonoBehaviour {
             {
                 print("Hit something at distance " + hit.distance + ". " + hit.collider.gameObject.tag);
 
-                if (hit.collider.tag == "Glasses") 
+                if (AMULETS.Contains(hit.collider.gameObject.tag))
                 {
-                    if (glassesSlot.transform.childCount == 1) // já vestia óculos anteriormente
+                    if (amulet != null)
                     {
-                        Transform t = hit.collider.transform;
-                        GameObject curGlasses = glassesSlot.transform.GetChild(0).gameObject;
-
-                        curGlasses.transform.position = t.position;
-                        curGlasses.transform.rotation = t.rotation;
-                        curGlasses.transform.SetParent(t.parent);
-                    }
-                    hit.collider.transform.SetParent(glassesSlot.transform);
-                    hit.collider.transform.localPosition = Vector3.zero;
-                    hit.collider.transform.localRotation = Quaternion.identity;
-                    eyeAnimator.Play("eyeOclusion");
-                }
-                else if (hit.collider.tag == "Key") // pegou a chave e colocou no inventário
-                {
-                    keys.Add(hit.collider.tag);
-                }
-                else if (hit.collider.tag == "Door") // tenta usar a chave na porta
-                {
-                    if (keys.Contains(hit.collider.tag)) //verifica se tem a chave certa
-                    {
-                        //******
-                        //CODIGO DE ABRIR PORTA
-                        //******
-                        keys.Remove(hit.collider.tag); //remove chave do inventario
+                        print("hello");
+                        GameObject aux = hit.collider.gameObject;
+                        amulet.transform.position = hit.collider.transform.position;
+                        Destroy(hit.collider.gameObject);
+                        Instantiate(amulet);
+                        amulet = aux;
                     }
                     else
                     {
-                        //******
-                        //MENSAGEM "Você não tem a chave para abrir essa porta"
-                        //******
+                        print("sfsfd");
+                        amulet = hit.collider.gameObject;
+                        Destroy(hit.collider.gameObject);
+                    }
+                }
+                else if (KEYS.Contains(hit.collider.gameObject.tag)) // pegou a chave e colocou no inventário
+                {
+                    keys.Add(hit.collider.gameObject.tag);
+                    Destroy(hit.collider.gameObject);
+
+                }
+                else if (DOORS.Contains(hit.collider.gameObject.tag)) // tenta usar a chave na porta
+                {
+                    if (keys.Contains("K" + hit.collider.gameObject.tag.Remove(0, 1))) //verifica se tem a chave certa
+                    {
+                        hit.collider.gameObject.SendMessageUpwards("Open");
+                        keys.Remove("K" + hit.collider.gameObject.tag.Remove(0, 1)); //remove chave do inventario
+                    }
+                    else
+                    {
+                        //mensagem
                     }
                 }
             }
         }
+        else if (Input.GetKeyDown(KeyCode.T))
+        {
+            //Load
+        }
         else if (Input.GetKeyDown(KeyCode.R))
         {
-            SaveLoad.Load();
+            Ray ray = Camera.main.ScreenPointToRay(Input.mousePosition);
+            RaycastHit hit;
+
+            if (Physics.Raycast(ray, out hit, grabDistance))
+            {
+                //Teleport
+                //blink
+            }
         }
     }
 }

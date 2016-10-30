@@ -1,0 +1,27 @@
+# Max2Mtl Version 4.0 Mar 10th, 2001
+#
+newmtl белый
+Ka  0.0 0.0 0.0
+Kd  0.0 0.0 0.0
+Ks  0.2 0.2 0.2
+d  1.0
+Ns  10.0
+illum 2
+#
+newmtl potolok-natazzno
+Ka  0.1 0.1 0.1
+Kd  0.1 0.1 0.1
+Ks  0.9 0.9 0.9
+d  1.0
+Ns  10.0
+illum 2
+#
+newmtl Glass
+Ka  0.2 0.3 0.3
+Kd  0.2 0.3 0.3
+Ks  1.0 1.0 1.0
+d  0.0
+Ns  10.0
+illum 2
+#
+# EOF

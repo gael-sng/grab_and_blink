@@ -67,18 +67,13 @@ public class PlayerController : MonoBehaviour {
         {
             Ray ray = Camera.main.ScreenPointToRay(Input.mousePosition);
             RaycastHit hit;
-
             if (Physics.Raycast(ray, out hit, grabDistance))
             {
-                print("Hit something at distance " + hit.distance + ". " + hit.collider.gameObject.tag);
-
                 print(hit.collider.gameObject.tag);
-
                 if (AMULETS.Contains(hit.collider.gameObject.tag))
                 {
                     if (amulet != null)
                     {
-                        print("nao null");
                         string aux = amulet;
                         amulet = hit.collider.gameObject.tag;
                         hit.collider.gameObject.tag = aux;
@@ -86,7 +81,6 @@ public class PlayerController : MonoBehaviour {
                     }
                     else
                     {
-                        print("null");
                         amulet = hit.collider.gameObject.tag;
                         Destroy(hit.collider.gameObject);
                     }

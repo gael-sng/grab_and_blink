@@ -26,6 +26,5 @@ public class CharacterControl : MonoBehaviour {
         float newRotation = head.transform.localEulerAngles.x - Time.deltaTime * rotateSpeed * Input.GetAxis("Mouse Y");
         
         head.transform.localEulerAngles = new Vector3(newRotation, head.transform.localEulerAngles.y, head.transform.localEulerAngles.z);
-        print("Actual: " + head.transform.localEulerAngles.x + " - Clamb between (" + maxAngle + ") and (" + (360 - maxAngle) + ")");
-	}
+    }
 }

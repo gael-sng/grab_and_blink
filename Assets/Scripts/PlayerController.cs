@@ -13,7 +13,8 @@ public class PlayerController : MonoBehaviour {
     static List<string> KEYS = new List<string>();
     static List<string> DOORS = new List<string>();
     static List<string> AMULETS = new List<string>();
-    static List<Texture> TEXTURES = new List<Texture>();
+    static List<Material> TEXTURES = new List<Material>();
+    static List<string> COLOR = new List<String>();
 
     void OnGUI()
     {
@@ -26,6 +27,15 @@ public class PlayerController : MonoBehaviour {
         Cursor.lockState = CursorLockMode.Locked;
         
         amulet = null;
+
+        COLOR.Add("yellow");
+        COLOR.Add("red");
+        COLOR.Add("marine");
+        COLOR.Add("green");
+        COLOR.Add("purple");
+        COLOR.Add("pink");
+        COLOR.Add("orange");
+        COLOR.Add("anil");
 
         KEYS.Add("K1");
         KEYS.Add("K2");
@@ -54,14 +64,14 @@ public class PlayerController : MonoBehaviour {
         AMULETS.Add("A7");
         AMULETS.Add("A8");
 
-        TEXTURES.Add((Texture)UnityEditor.AssetDatabase.LoadAssetAtPath("Assets/Textures/KnobTexture.png", typeof(Texture)));
-        TEXTURES.Add((Texture)UnityEditor.AssetDatabase.LoadAssetAtPath("Assets/Textures/KnobTexture.png", typeof(Texture)));
-        TEXTURES.Add((Texture)UnityEditor.AssetDatabase.LoadAssetAtPath("Assets/Textures/KnobTexture.png", typeof(Texture)));
-        TEXTURES.Add((Texture)UnityEditor.AssetDatabase.LoadAssetAtPath("Assets/Textures/KnobTexture.png", typeof(Texture)));
-        TEXTURES.Add((Texture)UnityEditor.AssetDatabase.LoadAssetAtPath("Assets/Textures/KnobTexture.png", typeof(Texture)));
-        TEXTURES.Add((Texture)UnityEditor.AssetDatabase.LoadAssetAtPath("Assets/Textures/KnobTexture.png", typeof(Texture)));
-        TEXTURES.Add((Texture)UnityEditor.AssetDatabase.LoadAssetAtPath("Assets/Textures/KnobTexture.png", typeof(Texture)));
-        TEXTURES.Add((Texture)UnityEditor.AssetDatabase.LoadAssetAtPath("Assets/Textures/KnobTexture.png", typeof(Texture)));
+        TEXTURES.Add((Material)UnityEditor.AssetDatabase.LoadAssetAtPath("Assets/Objects/Chave/Materials/Chave1.mat", typeof(Material)));
+        TEXTURES.Add((Material)UnityEditor.AssetDatabase.LoadAssetAtPath("Assets/Objects/Chave/Materials/Chave2.mat", typeof(Material)));
+        TEXTURES.Add((Material)UnityEditor.AssetDatabase.LoadAssetAtPath("Assets/Objects/Chave/Materials/Chave3.mat", typeof(Material)));
+        TEXTURES.Add((Material)UnityEditor.AssetDatabase.LoadAssetAtPath("Assets/Objects/Chave/Materials/Chave4.mat", typeof(Material)));
+        TEXTURES.Add((Material)UnityEditor.AssetDatabase.LoadAssetAtPath("Assets/Objects/Chave/Materials/Chave5.mat", typeof(Material)));
+        TEXTURES.Add((Material)UnityEditor.AssetDatabase.LoadAssetAtPath("Assets/Objects/Chave/Materials/Chave6.mat", typeof(Material)));
+        TEXTURES.Add((Material)UnityEditor.AssetDatabase.LoadAssetAtPath("Assets/Objects/Chave/Materials/Chave7.mat", typeof(Material)));
+        TEXTURES.Add((Material)UnityEditor.AssetDatabase.LoadAssetAtPath("Assets/Objects/Chave/Materials/Chave8.mat", typeof(Material)));
     }
 
     // Update is called once per frame
@@ -77,25 +87,27 @@ public class PlayerController : MonoBehaviour {
 
                     if (AMULETS.Contains(hit.collider.gameObject.tag)) //Se mirou um amuleto
                     {
-
                         if (amulet != null) //Já tenho um amuleto
                         {                   //Troca os amuletos de lugar
                             string aux = amulet;
                             amulet = hit.collider.gameObject.tag;
                             hit.collider.gameObject.tag = aux;
-                            hit.transform.gameObject.GetComponent<Renderer>().material.mainTexture = TEXTURES[Convert.ToInt32(aux.Remove(0, 1))];
+                            GotAmuletMessage(COLOR[Convert.ToInt32(amulet.Remove(0, 1))-1]);
+                            hit.transform.gameObject.GetComponent<Renderer>().material = TEXTURES[Convert.ToInt32(aux.Remove(0, 1))-1];
                         }
                         else //Não tenho amuleto, pego ele
                         {
-                            amulet = hit.collider.gameObject.tag;
+                        //Mensagem
+                        GotAmuletMessage(COLOR[Convert.ToInt32(amulet.Remove(0, 1))-1]);
+                        amulet = hit.collider.gameObject.tag;
                             Destroy(hit.collider.gameObject);
                         }
                     }
                     else if (KEYS.Contains(hit.collider.gameObject.tag)) //Se mirou em uma chave
                     {                                                    //Pega a chave e coloca no inventário
                         keys.Add(hit.collider.gameObject.tag);
+                        GotKeyMessage(COLOR[Convert.ToInt32(hit.collider.gameObject.tag.Remove(0, 1)) - 1]);
                         Destroy(hit.collider.gameObject);
-
                     }
                     else if (DOORS.Contains(hit.collider.gameObject.tag)) //Se mirou em uma porta (tenta abrir)
                     {
@@ -106,7 +118,7 @@ public class PlayerController : MonoBehaviour {
                         }
                         else
                         {
-                            //Mensagem de "Não conseguiu abrir a porta"
+                            DontHaveKeyMessage();
                         }
                     }
             }
@@ -126,6 +138,10 @@ public class PlayerController : MonoBehaviour {
                     if (DOORS.Contains(hit.collider.tag))
                     {
                         transform.position = hit.collider.GetComponentInParent<DoorOpening>().GetTeleportPosition(transform.position);
+                    }
+                    else
+                    {
+                        DontHaveAmuletMessage();
                     }
                     //blink
                 }

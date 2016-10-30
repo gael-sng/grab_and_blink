@@ -7,16 +7,14 @@ public class PlayerController : MonoBehaviour {
 
     public Animator eyeAnimator;
     public string amulet;
-    List<string> keys = new List<string>(); //suas chaves
+    List<string> keys = new List<string>();
     public float grabDistance = 2.5f;
 
     static List<string> KEYS = new List<string>();
     static List<string> DOORS = new List<string>();
     static List<string> AMULETS = new List<string>();
     static List<Texture> TEXTURES = new List<Texture>();
-
-
-    // Use this for initialization
+    
     void Start () {
 		//Cursor.visible = false;
 		Cursor.lockState = CursorLockMode.Locked;
@@ -59,65 +57,63 @@ public class PlayerController : MonoBehaviour {
         TEXTURES.Add((Texture)UnityEditor.AssetDatabase.LoadAssetAtPath("Assets/Textures/KnobTexture.png", typeof(Texture)));
         TEXTURES.Add((Texture)UnityEditor.AssetDatabase.LoadAssetAtPath("Assets/Textures/KnobTexture.png", typeof(Texture)));
     }
-
-    // Update is called once per frame
+    
     void Update()
     { 
-        if (Input.GetKeyDown(KeyCode.E))
+        if (Input.GetKeyDown(KeyCode.E)) //Tecla de interagir
         {
             Ray ray = Camera.main.ScreenPointToRay(Input.mousePosition);
             RaycastHit hit;
             if (Physics.Raycast(ray, out hit, grabDistance))
             {
                 print(hit.collider.gameObject.tag);
-                if (AMULETS.Contains(hit.collider.gameObject.tag))
+                if (AMULETS.Contains(hit.collider.gameObject.tag)) //Se mirou um amuleto
                 {
-                    if (amulet != null)
-                    {
+                    if (amulet != null) //Já tenho um amuleto
+                    {                   //Troca os amuletos de lugar
                         string aux = amulet;
                         amulet = hit.collider.gameObject.tag;
                         hit.collider.gameObject.tag = aux;
                         hit.transform.gameObject.GetComponent<Renderer>().material.mainTexture = TEXTURES[Convert.ToInt32(aux.Remove(0, 1))];
                     }
-                    else
+                    else //Não tenho amuleto, pego ele
                     {
                         amulet = hit.collider.gameObject.tag;
                         Destroy(hit.collider.gameObject);
                     }
                 }
-                else if (KEYS.Contains(hit.collider.gameObject.tag)) // pegou a chave e colocou no inventário
-                {
+                else if (KEYS.Contains(hit.collider.gameObject.tag)) //Se mirou em uma chave
+                {                                                    //Pega a chave e coloca no inventário
                     keys.Add(hit.collider.gameObject.tag);
                     Destroy(hit.collider.gameObject);
 
                 }
-                else if (DOORS.Contains(hit.collider.gameObject.tag)) // tenta usar a chave na porta
+                else if (DOORS.Contains(hit.collider.gameObject.tag)) //Se mirou em uma porta (tenta abrir)
                 {
-                    if (keys.Contains("K" + hit.collider.gameObject.tag.Remove(0, 1))) //verifica se tem a chave certa
+                    if (keys.Contains("K" + hit.collider.gameObject.tag.Remove(0, 1))) //Tem a chave certa
                     {
-                        hit.collider.gameObject.SendMessageUpwards("Open");
-                        keys.Remove("K" + hit.collider.gameObject.tag.Remove(0, 1)); //remove chave do inventario
+                        hit.collider.gameObject.SendMessageUpwards("Open");            //Abre a porta
+                        keys.Remove("K" + hit.collider.gameObject.tag.Remove(0, 1));   //Remove chave do inventario
                     }
                     else
                     {
-                        //mensagem
+                        //Mensagem de "Não conseguiu abrir a porta"
                     }
                 }
             }
         }
         else if (Input.GetKeyDown(KeyCode.T))
         {
-            //Load
+            //CheckPoint
         }
-        else if (Input.GetKeyDown(KeyCode.R))
+        else if (Input.GetKeyDown(KeyCode.R)) //Tecla do amuleto
         {
             Ray ray = Camera.main.ScreenPointToRay(Input.mousePosition);
             RaycastHit hit;
-
             if (Physics.Raycast(ray, out hit, grabDistance))
             {
                 //Teleport
-                //blink
+                //Animação de piscar
             }
         }
     }

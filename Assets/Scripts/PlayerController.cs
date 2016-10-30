@@ -27,16 +27,28 @@ public class PlayerController : MonoBehaviour {
         KEYS.Add("K2");
         KEYS.Add("K3");
         KEYS.Add("K4");
+        KEYS.Add("K5");
+        KEYS.Add("K6");
+        KEYS.Add("K7");
+        KEYS.Add("K8");
 
         DOORS.Add("D1");
         DOORS.Add("D2");
         DOORS.Add("D3");
         DOORS.Add("D4");
+        DOORS.Add("D5");
+        DOORS.Add("D6");
+        DOORS.Add("D7");
+        DOORS.Add("D8");
 
         AMULETS.Add("A1");
         AMULETS.Add("A2");
         AMULETS.Add("A3");
         AMULETS.Add("A4");
+        AMULETS.Add("A5");
+        AMULETS.Add("A6");
+        AMULETS.Add("A7");
+        AMULETS.Add("A8");
 
         TEXTURES.Add((Texture)UnityEditor.AssetDatabase.LoadAssetAtPath("Assets/Textures/KnobTexture.png", typeof(Texture)));
         TEXTURES.Add((Texture)UnityEditor.AssetDatabase.LoadAssetAtPath("Assets/Textures/KnobTexture.png", typeof(Texture)));

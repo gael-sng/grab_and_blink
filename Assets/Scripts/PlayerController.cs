@@ -114,7 +114,7 @@ public class PlayerController : MonoBehaviour {
         else if (Input.GetKeyDown(KeyCode.T))
         {
             //CheckPoint
-        } else if (Input.GetKeyDown(KeyCode.R)) { //Tentando teeportar pela porta
+        } else if (Input.GetKeyDown(KeyCode.F)) { //Tentando teeportar pela porta
             Ray ray = Camera.main.ScreenPointToRay(Input.mousePosition);
             RaycastHit hit;
 

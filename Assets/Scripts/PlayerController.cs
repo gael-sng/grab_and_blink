@@ -1,24 +1,26 @@
 ﻿using UnityEngine;
 using System.Collections;
 using System.Collections.Generic;
+using System;
 
 public class PlayerController : MonoBehaviour {
 
     public Animator eyeAnimator;
-    public GameObject amulet;
+    public string amulet;
     List<string> keys = new List<string>(); //suas chaves
     public float grabDistance = 2.5f;
 
     static List<string> KEYS = new List<string>();
     static List<string> DOORS = new List<string>();
     static List<string> AMULETS = new List<string>();
+    static List<Texture> TEXTURES = new List<Texture>();
 
 
     // Use this for initialization
     void Start () {
 		//Cursor.visible = false;
 		Cursor.lockState = CursorLockMode.Locked;
-
+        
         amulet = null;
 
         KEYS.Add("K1");
@@ -35,6 +37,15 @@ public class PlayerController : MonoBehaviour {
         AMULETS.Add("A2");
         AMULETS.Add("A3");
         AMULETS.Add("A4");
+
+        TEXTURES.Add((Texture)UnityEditor.AssetDatabase.LoadAssetAtPath("Assets/Textures/KnobTexture.png", typeof(Texture)));
+        TEXTURES.Add((Texture)UnityEditor.AssetDatabase.LoadAssetAtPath("Assets/Textures/KnobTexture.png", typeof(Texture)));
+        TEXTURES.Add((Texture)UnityEditor.AssetDatabase.LoadAssetAtPath("Assets/Textures/KnobTexture.png", typeof(Texture)));
+        TEXTURES.Add((Texture)UnityEditor.AssetDatabase.LoadAssetAtPath("Assets/Textures/KnobTexture.png", typeof(Texture)));
+        TEXTURES.Add((Texture)UnityEditor.AssetDatabase.LoadAssetAtPath("Assets/Textures/KnobTexture.png", typeof(Texture)));
+        TEXTURES.Add((Texture)UnityEditor.AssetDatabase.LoadAssetAtPath("Assets/Textures/KnobTexture.png", typeof(Texture)));
+        TEXTURES.Add((Texture)UnityEditor.AssetDatabase.LoadAssetAtPath("Assets/Textures/KnobTexture.png", typeof(Texture)));
+        TEXTURES.Add((Texture)UnityEditor.AssetDatabase.LoadAssetAtPath("Assets/Textures/KnobTexture.png", typeof(Texture)));
     }
 
     // Update is called once per frame
@@ -49,21 +60,22 @@ public class PlayerController : MonoBehaviour {
             {
                 print("Hit something at distance " + hit.distance + ". " + hit.collider.gameObject.tag);
 
+                print(hit.collider.gameObject.tag);
+
                 if (AMULETS.Contains(hit.collider.gameObject.tag))
                 {
                     if (amulet != null)
                     {
                         print("nao null");
-                        GameObject aux = hit.collider.gameObject;
-                        amulet.transform.position = hit.collider.transform.position;
-                        Destroy(hit.collider.gameObject);
-                        Instantiate(amulet);
-                        amulet = aux;
+                        string aux = amulet;
+                        amulet = hit.collider.gameObject.tag;
+                        hit.collider.gameObject.tag = aux;
+                        hit.transform.gameObject.GetComponent<Renderer>().material.mainTexture = TEXTURES[Convert.ToInt32(aux.Remove(0, 1))];
                     }
                     else
                     {
                         print("null");
-                        amulet = hit.collider.gameObject;
+                        amulet = hit.collider.gameObject.tag;
                         Destroy(hit.collider.gameObject);
                     }
                 }

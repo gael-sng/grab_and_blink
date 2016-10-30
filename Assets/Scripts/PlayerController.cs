@@ -9,6 +9,7 @@ public class PlayerController : MonoBehaviour {
     public Animator eyeAnimator;
     public string amulet;
     List<string> keys = new List<string>(); //suas chaves
+    
 
     static List<string> KEYS = new List<string>();
     static List<string> DOORS = new List<string>();
@@ -20,10 +21,8 @@ public class PlayerController : MonoBehaviour {
     {
         GUI.DrawTexture(new Rect(Screen.width / 2 - 7, Screen.height / 2 - 7, 14, 14), centerTexture);
     }
-
-    // Use this for initialization
+    
     void Start() {
-        Cursor.visible = false;
         Cursor.lockState = CursorLockMode.Locked;
         
         amulet = null;
@@ -73,10 +72,9 @@ public class PlayerController : MonoBehaviour {
         TEXTURES.Add((Material)UnityEditor.AssetDatabase.LoadAssetAtPath("Assets/Objects/Chave/Materials/Chave7.mat", typeof(Material)));
         TEXTURES.Add((Material)UnityEditor.AssetDatabase.LoadAssetAtPath("Assets/Objects/Chave/Materials/Chave8.mat", typeof(Material)));
     }
-
-    // Update is called once per frame
+    
     void Update() {
-        if (Input.GetKeyDown(KeyCode.E)) {
+        if (Input.GetMouseButtonDown(0)) {
             
             Ray ray = Camera.main.ScreenPointToRay(Input.mousePosition);
             RaycastHit hit;
@@ -92,21 +90,21 @@ public class PlayerController : MonoBehaviour {
                             string aux = amulet;
                             amulet = hit.collider.gameObject.tag;
                             hit.collider.gameObject.tag = aux;
-                            GotAmuletMessage(COLOR[Convert.ToInt32(amulet.Remove(0, 1))-1]);
-                            hit.transform.gameObject.GetComponent<Renderer>().material = TEXTURES[Convert.ToInt32(aux.Remove(0, 1))-1];
+                            GetComponent<GUIController>().GotAmuletMessage(COLOR[Convert.ToInt32(amulet.Remove(0, 1)) - 1]);
+                            hit.transform.gameObject.GetComponent<Renderer>().material = TEXTURES[Convert.ToInt32(aux.Remove(0, 1)) - 1];
                         }
                         else //Não tenho amuleto, pego ele
                         {
-                        //Mensagem
-                        GotAmuletMessage(COLOR[Convert.ToInt32(amulet.Remove(0, 1))-1]);
-                        amulet = hit.collider.gameObject.tag;
+                            //Mensagem
+                            amulet = hit.collider.gameObject.tag;
+                            GetComponent<GUIController>().GotAmuletMessage(COLOR[Convert.ToInt32(amulet.Remove(0, 1)) - 1]);
                             Destroy(hit.collider.gameObject);
                         }
                     }
                     else if (KEYS.Contains(hit.collider.gameObject.tag)) //Se mirou em uma chave
                     {                                                    //Pega a chave e coloca no inventário
                         keys.Add(hit.collider.gameObject.tag);
-                        GotKeyMessage(COLOR[Convert.ToInt32(hit.collider.gameObject.tag.Remove(0, 1)) - 1]);
+                        GetComponent<GUIController>().GotKeyMessage(COLOR[Convert.ToInt32(hit.collider.gameObject.tag.Remove(0, 1)) - 1]);
                         Destroy(hit.collider.gameObject);
                     }
                     else if (DOORS.Contains(hit.collider.gameObject.tag)) //Se mirou em uma porta (tenta abrir)
@@ -118,15 +116,11 @@ public class PlayerController : MonoBehaviour {
                         }
                         else
                         {
-                            DontHaveKeyMessage();
+                             GetComponent<GUIController>().DontHaveKeyMessage();
                         }
                     }
             }
-        }
-        else if (Input.GetKeyDown(KeyCode.T))
-        {
-            //CheckPoint
-        } else if (Input.GetKeyDown(KeyCode.R)) { //Tentando teeportar pela porta
+        } else if (Input.GetMouseButtonDown(1)) { //Tentando teeportar pela porta
             Ray ray = Camera.main.ScreenPointToRay(Input.mousePosition);
             RaycastHit hit;
 
@@ -141,9 +135,9 @@ public class PlayerController : MonoBehaviour {
                     }
                     else
                     {
-                        DontHaveAmuletMessage();
+                        GetComponent<GUIController>().DontHaveAmuletMessage();
                     }
-                    //blink
+                    //blink animation
                 }
             }
         }

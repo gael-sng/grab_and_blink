@@ -5,6 +5,7 @@ using System.Collections.Generic;
 
 public class PlayerController : MonoBehaviour {
 
+    public Texture2D centerTexture;
     public Animator eyeAnimator;
     public string amulet;
     List<string> keys = new List<string>(); //suas chaves
@@ -16,9 +17,7 @@ public class PlayerController : MonoBehaviour {
 
     void OnGUI()
     {
-        var centeredStyle = GUI.skin.GetStyle("Label");
-        centeredStyle.alignment = TextAnchor.UpperCenter;
-        GUI.Label(new Rect(Screen.width / 2 - 50, Screen.height / 2 - 25, 100, 50), "x", centeredStyle);
+        GUI.DrawTexture(new Rect(Screen.width / 2 - 7, Screen.height / 2 - 7, 14, 14), centerTexture);
     }
 
     // Use this for initialization
@@ -63,8 +62,6 @@ public class PlayerController : MonoBehaviour {
         TEXTURES.Add((Texture)UnityEditor.AssetDatabase.LoadAssetAtPath("Assets/Textures/KnobTexture.png", typeof(Texture)));
         TEXTURES.Add((Texture)UnityEditor.AssetDatabase.LoadAssetAtPath("Assets/Textures/KnobTexture.png", typeof(Texture)));
         TEXTURES.Add((Texture)UnityEditor.AssetDatabase.LoadAssetAtPath("Assets/Textures/KnobTexture.png", typeof(Texture)));
-
-        OnGUI();
     }
 
     // Update is called once per frame
@@ -117,15 +114,21 @@ public class PlayerController : MonoBehaviour {
         else if (Input.GetKeyDown(KeyCode.T))
         {
             //CheckPoint
-        }
-        else if (Input.GetKeyDown(KeyCode.R)) //Tecla do amuleto
-        {
+        } else if (Input.GetKeyDown(KeyCode.R)) { //Tentando teeportar pela porta
             Ray ray = Camera.main.ScreenPointToRay(Input.mousePosition);
             RaycastHit hit;
+
             if (Physics.Raycast(ray, out hit, 0.6f))
             {
-                //Teleport
-                //Animação de piscar
+                if (amulet.Equals("A" + hit.collider.gameObject.tag.Remove(0, 1))) //Tem o amuleto certo
+                {
+                    print("Porta tag: " + hit.collider.tag);
+                    if (DOORS.Contains(hit.collider.tag))
+                    {
+                        transform.position = hit.collider.GetComponentInParent<DoorOpening>().GetTeleportPosition(transform.position);
+                    }
+                    //blink
+                }
             }
         }
     }
